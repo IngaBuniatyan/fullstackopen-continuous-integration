@@ -1,0 +1,29 @@
+name: Periodic health check
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_url:
+        description: URL to check instead of the production health endpoint
+        required: false
+        default: https://fullstackopen-continuous-integration.onrender.com/health
+        type: string
+  schedule:
+    - cron: '17 5 * * *'
+
+permissions:
+  contents: read
+
+jobs:
+  health_check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check application health
+        uses: jtalk/url-health-check-action@e7d5ebdc9027fbf494d2d034f3e8fc78f8b7a2b9 # v5
+        with:
+          url: ${{ github.event_name == 'workflow_dispatch' && inputs.target_url || 'https://fullstackopen-continuous-integration.onrender.com/health' }}
+          follow-redirect: true
+          max-attempts: 5
+          retry-delay: 20s
+          retry-all: true
