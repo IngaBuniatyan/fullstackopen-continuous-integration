@@ -51,6 +51,9 @@ jobs:
     permissions:
       contents: write
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Bump version and push tag
         uses: anothrNick/github-tag-action@4ed44965e0db8dab2b466a16da04aec3cc312fd8
         env:
