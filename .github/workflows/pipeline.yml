@@ -33,3 +33,6 @@ jobs:
 
       - name: Run end-to-end tests
         run: npm run test:e2e
+
+      - name: Trigger Render deployment
+        run: curl --fail --show-error --silent "${{ secrets.RENDER_DEPLOY_HOOK }}"
