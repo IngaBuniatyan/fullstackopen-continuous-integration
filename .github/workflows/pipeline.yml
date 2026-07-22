@@ -7,8 +7,11 @@ on:
     branches: [master]
     types: [opened, synchronize]
 
+permissions:
+  contents: read
+
 jobs:
-  simple_deployment_pipeline:
+  deployment_pipeline:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -38,4 +41,18 @@ jobs:
         run: npm run test:e2e
 
       - name: Trigger Render deployment
+        if: ${{ github.event_name == 'push' && !contains(join(github.event.commits.*.message, ' '), '#skip') }}
         run: curl --fail --show-error --silent "${{ secrets.RENDER_DEPLOY_HOOK }}"
+
+  tag_release:
+    needs: [deployment_pipeline]
+    if: ${{ github.event_name == 'push' && !contains(join(github.event.commits.*.message, ' '), '#skip') }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Bump version and push tag
+        uses: anothrNick/github-tag-action@4ed44965e0db8dab2b466a16da04aec3cc312fd8
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEFAULT_BUMP: patch
