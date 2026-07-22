@@ -17,3 +17,14 @@ Start by running `npm install` inside the project folder
 ## Deployed application
 
 https://fullstackopen-continuous-integration.onrender.com
+
+## Exercise repositories
+
+Pokedex deployment:
+https://fullstackopen-continuous-integration.onrender.com
+
+Own CI/CD application:
+https://github.com/IngaBuniatyan/fullstackopen-own-pipeline
+
+Own application deployment:
+https://ingabuniatyan.github.io/fullstackopen-own-pipeline/
